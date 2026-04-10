@@ -425,7 +425,7 @@ body::after {
 
 /* Team feed */
 .team-feed-wrap {
-  overflow: visible; max-height: 80px; position: relative;
+  overflow: visible; max-height: 120px; position: relative;
   flex-shrink: 0; margin-top: 4px;
 }
 .team-feed {
@@ -489,14 +489,22 @@ body::after {
   max-width: 900px; width: 100%; padding: 0 40px 190px;
 }
 .timer-chips {
-  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
-  margin-bottom: 16px; max-width: 900px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 12px;
+  padding: 0 20px;
 }
 .timer-chip {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 8px 14px;
-  font-size: 13px; color: var(--text-muted); text-align: left;
-  min-width: 200px; max-width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 14px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 .timer-chip .chip-team {
   font-weight: 600; color: var(--text); font-size: 13px; margin-bottom: 2px;
@@ -962,16 +970,15 @@ body::after {
 }
 .challenge-card .card-count {
   margin-top: auto;
-  padding: 8px 14px;
-  border-radius: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
   background: #e8f4ff;
-  font-size: 13px;
-  color: #1a8fff;
+  font-size: 12px;
+  color: var(--accent);
   font-weight: 600;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 6px;
 }
 .card-steps {
   display: block;
@@ -1000,6 +1007,8 @@ body::after {
 .challenge-card .card-count .team-name-pill:nth-child(1) { animation-delay: 0s; }
 .challenge-card .card-count .team-name-pill:nth-child(2) { animation-delay: 0.1s; }
 .challenge-card .card-count .team-name-pill:nth-child(3) { animation-delay: 0.2s; }
+.challenge-card .card-count .team-name-pill[draggable="true"] { cursor: grab; }
+.challenge-card .card-count .team-name-pill[draggable="true"]:active { cursor: grabbing; }
 .challenge-card .card-count .live-indicator {
   display: inline-block;
   width: 6px;
@@ -1008,6 +1017,18 @@ body::after {
   background: #4ade80;
   box-shadow: 0 0 6px rgba(74,222,128,0.4);
   animation: livePulse 2s ease-in-out infinite;
+}
+
+.challenge-card .card-count .pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.challenge-card .card-count .count-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
 }
 </style>
 </head>
@@ -1458,9 +1479,10 @@ db.ref('teams').on('value', snap => {
     if (teamCount > 0) {
       avatarHtml = '<span class="team-avatars">';
       const challengeTeams = entries.filter(([, t]) => t.challenge === c.id);
-      const teamNames = challengeTeams.map(([, t]) => t.name || 'Team');
-      for (let a = 0; a < Math.min(teamNames.length, 10); a++) {
-        avatarHtml += '<span class="team-name-pill">' + teamNames[a].replace(/</g,'&lt;') + '</span>';
+      for (let a = 0; a < Math.min(challengeTeams.length, 10); a++) {
+        const [uid, t] = challengeTeams[a];
+        const name = (t.name || 'Team').replace(/</g, '&lt;');
+        avatarHtml += '<span class="team-name-pill" draggable="true" data-uid="' + uid + '">' + name + '</span>';
       }
       
       avatarHtml += '</span>';
@@ -1488,6 +1510,48 @@ db.ref('teams').on('value', snap => {
       cl.appendChild(card);
     });
     cardsBuilt = true;
+
+    // --- Drag-and-drop: move team pills between challenge cards ---
+    document.addEventListener('dragstart', function(e) {
+      if (e.target.classList.contains('team-name-pill')) {
+        e.dataTransfer.setData('text/plain', e.target.dataset.uid);
+        e.target.style.opacity = '0.5';
+      }
+    });
+    document.addEventListener('dragend', function(e) {
+      if (e.target.classList.contains('team-name-pill')) {
+        e.target.style.opacity = '1';
+      }
+    });
+    document.addEventListener('dragover', function(e) {
+      var card = e.target.closest('.challenge-card');
+      if (card) {
+        e.preventDefault();
+        card.style.outline = '2px solid var(--accent)';
+        card.style.outlineOffset = '-2px';
+      }
+    });
+    document.addEventListener('dragleave', function(e) {
+      var card = e.target.closest('.challenge-card');
+      if (card) {
+        card.style.outline = '';
+        card.style.outlineOffset = '';
+      }
+    });
+    document.addEventListener('drop', function(e) {
+      e.preventDefault();
+      var card = e.target.closest('.challenge-card');
+      if (!card) return;
+      card.style.outline = '';
+      card.style.outlineOffset = '';
+      var teamUid = e.dataTransfer.getData('text/plain');
+      var newChallenge = parseInt(card.getAttribute('data-challenge'));
+      if (teamUid && !isNaN(newChallenge)) {
+        db.ref('teams/' + teamUid + '/challenge').set(newChallenge);
+        playPop();
+      }
+    });
+
   } else {
     challenges.forEach((c, idx) => {
       const card = cl.querySelector('[data-challenge="' + c.id + '"]');
