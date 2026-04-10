@@ -102,7 +102,7 @@ body::after {
 .nav-dot:hover { background: var(--text-muted); }
 .nav-right {
   display: flex; align-items: center; gap: 12px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 13px; color: var(--text-muted);
 }
 
@@ -257,8 +257,13 @@ body::after {
 }
 .welcome-counter {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: 15px; color: var(--text-muted);
-  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 15px; color: var(--accent);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  background: var(--accent-light);
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(26,143,255,0.15);
   transition: transform 0.3s ease;
 }
 .welcome-counter.bump {
@@ -528,7 +533,7 @@ body::after {
   color: var(--text-subtle); margin-bottom: 10px;
 }
 .timer-display {
-  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: clamp(72px, 10vw, 110px); font-weight: 700; letter-spacing: -0.02em;
   color: var(--text); line-height: 1;
   margin-bottom: 16px;
@@ -623,7 +628,7 @@ body::after {
   box-shadow: var(--shadow-sm);
 }
 .vote-rank {
-  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 14px; font-weight: 600; color: var(--text-subtle); text-align: center;
 }
 .vote-rank.top { color: #ffd700; }
@@ -662,12 +667,12 @@ body::after {
   background: linear-gradient(90deg, #ffd700, #f5a623);
 }
 .vote-count {
-  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 15px; font-weight: 600; color: var(--text); text-align: right;
 }
 .vote-total {
   text-align: center; margin-top: 8px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 13px; color: var(--text-subtle);
 }
 
@@ -1327,7 +1332,7 @@ db.ref('teams').on('value', snap => {
   const entries = Object.entries(teamsData).filter(([k, t]) => t && t.name);
 
   // Welcome counter
-  document.getElementById('teamCount').textContent = entries.length + ' team' + (entries.length !== 1 ? 's' : '') + ' joined';
+  document.getElementById('teamCount').textContent = '\u{1F44B} ' + entries.length + ' team' + (entries.length !== 1 ? 's' : '') + ' joined';
 
   // Add blob characters for new teams
   entries.forEach(([uid, t], i) => {
