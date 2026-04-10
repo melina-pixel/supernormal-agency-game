@@ -1078,6 +1078,17 @@ body::after {
 
 
 
+
+.vote-blob {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+  animation: blobBreathe 3s ease-in-out infinite;
+}
+.vote-row:nth-child(1) .vote-blob { animation-duration: 2.8s; }
+.vote-row:nth-child(2) .vote-blob { animation-duration: 3.2s; animation-delay: 0.5s; }
+.vote-row:nth-child(3) .vote-blob { animation-duration: 3.5s; animation-delay: 0.3s; }
 </style>
 </head>
 <body>
@@ -1748,10 +1759,11 @@ function renderVoteBars() {
       div.style.animation = 'fadeUp 0.4s ease ' + (i * 0.06) + 's both';
       div.style.order = i;
       const barBg = (i === 0 && r.count > 0) ? 'linear-gradient(90deg, #ffd700, #f5a623)' : 'linear-gradient(90deg, var(--accent), #60b8ff)';
+      var blobIdx = teamBlobMap[r.uid] !== undefined ? teamBlobMap[r.uid] : (i % blobImages.length);
       div.innerHTML =
         '<span class="vote-rank' + (i === 0 && r.count > 0 ? ' top' : '') + '">#' + (i + 1) + '</span>' +
-        '<span class="vote-emoji">' + r.emoji + '</span>' +
-        '<div class="vote-info"><span class="vote-name">' + r.name + '</span><span class="vote-tag">' + r.challenge + '</span></div>' +
+        '<img class="vote-blob" src="' + blobImages[blobIdx] + '">' +
+        '<div class="vote-info"><span class="vote-name">' + r.name + '</span><span class="vote-tag">' + r.emoji + ' ' + r.challenge + '</span></div>' +
         '<div class="vote-bar-wrap"><div class="vote-bar-fill" style="width:' + (r.count > 0 ? Math.max(pct, 5) : 0) + '%;background:' + barBg + '"></div></div>' +
         '<span class="vote-count">' + r.count + '</span>';
       container.appendChild(div);
