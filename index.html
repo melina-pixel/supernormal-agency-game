@@ -970,16 +970,13 @@ body::after {
 }
 .challenge-card .card-count {
   margin-top: auto;
-  padding: 6px 10px;
-  border-radius: 10px;
-  background: #e8f4ff;
+  padding-top: 8px;
   font-size: 12px;
   color: var(--accent);
   font-weight: 600;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   gap: 4px;
-  align-self: flex-start;
 }
 .card-steps {
   display: block;
@@ -1023,14 +1020,42 @@ body::after {
 .challenge-card .card-count .pill-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 6px;
+  align-items: flex-end;
 }
 .challenge-card .card-count .count-text {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   font-size: 12px;
 }
+
+.challenge-card .card-count .team-blob {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+  animation: pillPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+.challenge-card .card-count .team-blob:active { cursor: grabbing; }
+.challenge-card .card-count .team-blob-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.challenge-card .card-count .team-blob-name {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  margin-top: 1px;
+}
+.challenge-card .card-count .team-blob:nth-child(1) { animation-delay: 0s; }
+.challenge-card .card-count .team-blob:nth-child(2) { animation-delay: 0.1s; }
+.challenge-card .card-count .team-blob:nth-child(3) { animation-delay: 0.15s; }
+.challenge-card .card-count .team-blob:nth-child(4) { animation-delay: 0.2s; }
+.challenge-card .card-count .team-blob:nth-child(5) { animation-delay: 0.25s; }
 </style>
 </head>
 <body>
@@ -1483,7 +1508,8 @@ db.ref('teams').on('value', snap => {
       for (let a = 0; a < Math.min(challengeTeams.length, 10); a++) {
         const [uid, t] = challengeTeams[a];
         const name = (t.name || 'Team').replace(/</g, '&lt;');
-        avatarHtml += '<span class="team-name-pill" draggable="true" data-uid="' + uid + '">' + name + '</span>';
+        const blobIdx = a % blobImages.length;
+        avatarHtml += '<div class="team-blob" draggable="true" data-uid="' + uid + '"><img src="' + blobImages[blobIdx] + '" class="team-blob-img"><span class="team-blob-name">' + name + '</span></div>';
       }
       
       avatarHtml += '</span>';
@@ -1514,14 +1540,14 @@ db.ref('teams').on('value', snap => {
 
     // --- Drag-and-drop: move team pills between challenge cards ---
     document.addEventListener('dragstart', function(e) {
-      if (e.target.classList.contains('team-name-pill')) {
-        e.dataTransfer.setData('text/plain', e.target.dataset.uid);
-        e.target.style.opacity = '0.5';
+      if ((e.target.classList.contains('team-name-pill') || e.target.closest('.team-blob'))) {
+        var dragEl = e.target.closest('.team-blob') || e.target; e.dataTransfer.setData('text/plain', dragEl.dataset.uid);
+        var fadeEl = e.target.closest('.team-blob') || e.target; fadeEl.style.opacity = '0.5';
       }
     });
     document.addEventListener('dragend', function(e) {
-      if (e.target.classList.contains('team-name-pill')) {
-        e.target.style.opacity = '1';
+      if ((e.target.classList.contains('team-name-pill') || e.target.closest('.team-blob'))) {
+        var restoreEl = e.target.closest('.team-blob') || e.target; restoreEl.style.opacity = '1';
       }
     });
     document.addEventListener('dragover', function(e) {
