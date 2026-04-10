@@ -858,31 +858,66 @@ body::after {
 /* The table */
 .meeting-table {
   position: absolute;
-  bottom: 70px;
+  bottom: 60px;
   left: 50%;
-  transform: translateX(-50%) perspective(600px) rotateX(45deg);
-  width: 55%;
-  max-width: 700px;
-  height: 120px;
-  background: linear-gradient(180deg, #c8dae8 0%, #a8c4d8 40%, #90b0c8 100%);
-  border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 750px;
+  height: 80px;
   z-index: 1;
-  border: 2px solid rgba(255,255,255,0.5);
 }
-
-/* Table shadow/base for 3D effect */
+/* Table top surface */
+.meeting-table::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(170deg, #e8f0f8 0%, #d0dfee 40%, #b8cee0 100%);
+  border-radius: 8px;
+  border: 1.5px solid rgba(255,255,255,0.6);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  /* 3D perspective tilt */
+  transform: perspective(800px) rotateX(25deg);
+  transform-origin: bottom center;
+}
+/* Table front face (thickness) */
 .meeting-table::after {
   content: '';
   position: absolute;
-  bottom: -6px;
-  left: 5%;
-  right: 5%;
-  height: 10px;
-  background: rgba(120,160,190,0.3);
-  border-radius: 50%;
-  filter: blur(4px);
+  top: 38px;
+  left: 2%;
+  right: 2%;
+  height: 14px;
+  background: linear-gradient(180deg, #b0c4d8 0%, #95afc4 100%);
+  border-radius: 0 0 6px 6px;
+  border-left: 1.5px solid rgba(255,255,255,0.4);
+  border-right: 1.5px solid rgba(255,255,255,0.4);
+  border-bottom: 1.5px solid rgba(255,255,255,0.3);
 }
+/* Table legs */
+.table-legs {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 750px;
+  height: 80px;
+  pointer-events: none;
+  z-index: 0;
+}
+.table-leg {
+  position: absolute;
+  bottom: -10px;
+  width: 4px;
+  height: 22px;
+  background: linear-gradient(180deg, #95afc4 0%, #7a9ab4 100%);
+  border-radius: 0 0 2px 2px;
+}
+.table-leg:nth-child(1) { left: 12%; }
+.table-leg:nth-child(2) { right: 12%; }
 
 /* Seat positions - blobs sit above the table */
 .blob-seat {
@@ -972,6 +1007,7 @@ body::after {
 <div class="screen active" id="screen0">
   <div class="blob-container" id="blobContainer">
     <div class="meeting-table"></div>
+    <div class="table-legs"><div class="table-leg"></div><div class="table-leg"></div></div>
   </div>
   <div class="welcome-floats">
     <span class="float-emoji" style="left:3%;top:12%;font-size:56px;animation-duration:12s;">🦈</span>
@@ -1301,17 +1337,17 @@ const blobImages = [
 const renderedBlobs = new Set();
 
 const seatPositions = [
-  // Alternating far/near so teams fill both sides
-  { left: '30%', bottom: '130px', scale: 0.6 },   // far 1
-  { left: '25%', bottom: '20px', scale: 0.9 },     // near 1
-  { left: '50%', bottom: '138px', scale: 0.6 },    // far 2
-  { left: '50%', bottom: '24px', scale: 0.9 },     // near 2
-  { left: '70%', bottom: '130px', scale: 0.6 },    // far 3
-  { left: '75%', bottom: '20px', scale: 0.9 },     // near 3
-  { left: '20%', bottom: '135px', scale: 0.6 },    // far 4
-  { left: '85%', bottom: '22px', scale: 0.9 },     // near 4
-  { left: '80%', bottom: '135px', scale: 0.6 },    // far 5
-  { left: '15%', bottom: '22px', scale: 0.9 }      // near 5
+  // Alternating far/near — rectangular table
+  { left: '28%', bottom: '145px', scale: 0.55 },   // far 1
+  { left: '22%', bottom: '8px', scale: 0.85 },      // near 1
+  { left: '50%', bottom: '148px', scale: 0.55 },    // far 2
+  { left: '50%', bottom: '10px', scale: 0.85 },     // near 2
+  { left: '72%', bottom: '145px', scale: 0.55 },    // far 3
+  { left: '78%', bottom: '8px', scale: 0.85 },      // near 3
+  { left: '38%', bottom: '147px', scale: 0.55 },    // far 4
+  { left: '36%', bottom: '9px', scale: 0.85 },      // near 4
+  { left: '62%', bottom: '147px', scale: 0.55 },    // far 5
+  { left: '64%', bottom: '9px', scale: 0.85 }       // near 5
 ]; // supports up to 15 teams
 
 const idleAnims = ['blobIdle1', 'blobIdle2', 'blobIdle3'];
@@ -1737,7 +1773,7 @@ function resetAll() {
   cc.getContext('2d').clearRect(0, 0, cc.width, cc.height);
 
   const bc = document.getElementById('blobContainer');
-  bc.innerHTML = '<div class="meeting-table"></div>';
+  bc.innerHTML = '<div class="meeting-table"></div><div class="table-legs"><div class="table-leg"></div><div class="table-leg"></div></div>';
   renderedBlobs.clear();
   goTo(0);
 }
