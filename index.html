@@ -1495,13 +1495,14 @@ function addBlobForTeam(name, index) {
 let prevCounts = {};
 let cardsBuilt = false;
 
+let teamBlobMap = {};
 // TEAMS LISTENER
 db.ref('teams').on('value', snap => {
   teamsData = snap.val() || {};
   const entries = Object.entries(teamsData).filter(([k, t]) => t && t.name);
   // Assign blobs by join order — first 6 teams all get different blobs
   const sorted = [...entries].sort((a, b) => (a[1].joinedAt || 0) - (b[1].joinedAt || 0));
-  const teamBlobMap = {};
+  teamBlobMap = {};
   sorted.forEach(([uid], i) => { teamBlobMap[uid] = i % blobImages.length; });
 
   // Welcome counter
