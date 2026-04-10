@@ -238,7 +238,7 @@ body::after {
   margin-bottom: 14px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   box-shadow: 0 4px 15px rgba(26,143,255,0.3);
 }
 @keyframes badgeShine {
@@ -309,16 +309,17 @@ body::after {
   font-size: 13px; color: var(--text-muted); margin-bottom: 0;
 }
 .challenge-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto;
   grid-template-rows: 1fr 1fr;
   gap: 8px; margin-bottom: 8px; flex: 1; min-height: 0;
 }
 .challenge-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 14px;
+  border-radius: 12px; padding: 12px;
   transition: all 0.25s ease; cursor: default;
   box-shadow: var(--shadow-sm);
   display: flex; flex-direction: column; overflow: hidden;
+  align-self: start;
 }
 .challenge-card:hover {
   border-color: var(--border-hover);
