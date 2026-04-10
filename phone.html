@@ -116,7 +116,9 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,1
 #s0 .event-meta{font-size:14px;color:var(--text-subtle);margin-bottom:32px}
 #s0 form{width:100%;display:flex;flex-direction:column;gap:12px}
 #s0 .btn{background:linear-gradient(110deg, var(--accent) 0%, var(--accent) 40%, #4da6ff 50%, var(--accent) 60%, var(--accent) 100%);background-size:200% 100%;animation:btnShimmer 3s ease-in-out infinite;box-shadow:0 4px 16px rgba(26,143,255,0.3)}
-#s0 .waiting{display:none;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:14px;color:var(--text-muted)}
+#s0 .waiting{display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:14px;color:var(--text-muted)}
+#s0 .waiting .wait-row{display:flex;align-items:center;gap:8px}
+#s0 .waiting .change-btn{margin-top:16px;background:var(--accent);color:#fff;border:none;font-size:13px;font-weight:600;padding:10px 24px;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px rgba(26,143,255,0.25)}
 #s0 .waiting .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite,waitPulseRing 2s ease-in-out infinite}
 
 /* ---- Screen 1: PICK (compact radio list) ---- */
@@ -320,9 +322,8 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,1
     <button type="submit" class="btn" id="joinBtn">Join &rarr;</button>
   </form>
   <div class="waiting" id="waiting">
-    <div class="dot pulse"></div>
-    <span>Waiting for host to start...</span>
-    <button onclick="startFresh()" style="margin-top:20px;background:none;border:none;color:#fff;font-size:13px;font-weight:500;cursor:pointer;text-decoration:underline;text-underline-offset:3px;opacity:0.7;">Change team name</button>
+    <div class="wait-row"><div class="dot pulse"></div><span>Waiting for host to start...</span></div>
+    <button class="change-btn" onclick="startFresh()">Change team name</button>
   </div>
 </div>
 
