@@ -688,8 +688,9 @@ function initTimer(lateJoin) {
     const ch = challenges[cid] || challenges[0];
     $('chBadge').querySelector('.emoji').textContent = ch.emoji;
     $('chBadge').querySelector('.title').textContent = ch.title;
-    // Show full challenge description
-    $('chDescTitle').textContent = ch.emoji + ' ' + ch.title;
+    // Show full challenge description (title already shown in badge above)
+    $('chDescTitle').textContent = '';
+    $('chDescTitle').style.display = 'none';
     $('chDescText').textContent = ch.desc;
     $('chDescCard').style.display = '';
   });
