@@ -1074,6 +1074,32 @@ body::after {
     transform: translateY(-2px) scale(1.01) rotate(1deg); 
   }
 }
+
+.side-badge {
+  position: fixed;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  background: rgba(255,255,255,0.8);
+  padding: 12px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(26,143,255,0.1);
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+.left-badge {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+}
+.right-badge {
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+}
 </style>
 </head>
 <body>
@@ -1142,9 +1168,11 @@ body::after {
     <span class="float-emoji" style="left:50%;top:95%;font-size:12px;animation-duration:22s;animation-delay:-5s;">✦</span>
   </div>
   <div class="challenges-wrap">
+  <div class="side-badge left-badge">📱 Join from your phone</div>
+  <div class="side-badge right-badge">supernormal.com</div>
     <div class="section-header stagger-1">
       <div class="section-title">Choose your challenge</div>
-      <div class="section-sub">Join from your phone and pick one · Download the app at supernormal.com</div>
+      <div class="section-sub"></div>
     </div>
     <div class="challenge-grid" id="challengeList"></div>
     <div class="team-feed-wrap">
