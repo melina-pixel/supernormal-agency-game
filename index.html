@@ -1048,6 +1048,31 @@ body::after {
   animation: livePulse 2s ease-in-out infinite;
   vertical-align: middle;
 }
+
+/* Blob breathing animations */
+.blob-char img, .team-blob-img {
+  animation: blobBreathe 3s ease-in-out infinite !important;
+}
+.blob-char:nth-child(2) img, .team-blob:nth-child(2) .team-blob-img { animation-duration: 3.5s !important; animation-delay: 0.5s !important; }
+.blob-char:nth-child(3) img, .team-blob:nth-child(3) .team-blob-img { animation-duration: 2.8s !important; animation-delay: 1s !important; }
+.blob-char:nth-child(4) img, .team-blob:nth-child(4) .team-blob-img { animation-duration: 3.2s !important; animation-delay: 0.3s !important; }
+.blob-char:nth-child(5) img, .team-blob:nth-child(5) .team-blob-img { animation-duration: 3.7s !important; animation-delay: 0.8s !important; }
+.blob-char:nth-child(6) img, .team-blob:nth-child(6) .team-blob-img { animation-duration: 2.6s !important; animation-delay: 1.2s !important; }
+
+@keyframes blobBreathe {
+  0%, 100% { 
+    transform: translateY(0) scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: translateY(-3px) scale(1.02) rotate(-1deg); 
+  }
+  50% { 
+    transform: translateY(-5px) scale(1.03) rotate(0deg); 
+  }
+  75% { 
+    transform: translateY(-2px) scale(1.01) rotate(1deg); 
+  }
+}
 </style>
 </head>
 <body>
