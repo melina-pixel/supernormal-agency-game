@@ -1535,7 +1535,7 @@ db.ref('teams').on('value', snap => {
       
       avatarHtml += '</span>';
     }
-    const countLabel = teamCount === 0 ? '<span class="live-indicator"></span> 0 teams' : '<span class="live-indicator active"></span> ' + teamCount + ' team' + (teamCount !== 1 ? 's' : '');
+    const countLabel = teamCount === 0 ? '<span class="count-text"><span class="live-indicator"></span> 0 teams</span>' : '<span class="count-text"><span class="live-indicator active"></span> ' + teamCount + ' team' + (teamCount !== 1 ? 's' : '') + '</span>';
     return avatarHtml + countLabel;
   }
 
