@@ -309,7 +309,7 @@ body::after {
   font-size: 13px; color: var(--text-muted); margin-bottom: 0;
 }
 .challenge-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto; align-content: center;
   grid-template-rows: 1fr 1fr;
   gap: 8px; margin-bottom: 8px; flex: 1; min-height: 0;
 }
@@ -360,9 +360,7 @@ body::after {
 .challenge-card .card-desc {
   font-size: 14px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
 }
-.challenge-card .card-hint {
-  font-size: 12px; font-style: italic; color: var(--text-subtle); margin-bottom: 8px; line-height: 1.3;
-}
+.challenge-card 
 .challenge-card .card-count {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: 10px; color: var(--text-subtle);
@@ -1039,7 +1037,7 @@ body::after {
   <div class="challenges-wrap">
     <div class="section-header stagger-1">
       <div class="section-title">Choose your challenge</div>
-      <div class="section-sub">Join from your phone and pick one</div>
+      <div class="section-sub">Join from your phone and pick one · Download the app at supernormal.com</div>
     </div>
     <div class="challenge-grid" id="challengeList"></div>
     <div class="team-feed-wrap">
@@ -1181,12 +1179,12 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 const challenges = [
-  { id: 0, title: "Shark Tank Moment", emoji: "\u{1F988}", tag: "STARTUP", short: "Create a startup from scratch. Pitch it like you\u2019re asking for $5 million." },
-  { id: 1, title: "The Devil Wears Decks", emoji: "\u{1F460}", tag: "DESIGN", short: "Find the ugliest presentation on the internet. Make it beautiful." },
-  { id: 2, title: "The Apprentice: Agency Edition", emoji: "\u{1F527}", tag: "AUTOMATION", short: "Pick the workflow that makes you want to scream. Build something that fixes it." },
-  { id: 3, title: "Ocean\u2019s Eleven: The Intel Job", emoji: "\u{1F575}\uFE0F", tag: "STRATEGY", short: "Pick a competitor you\u2019d love to outsmart. Build a plan to take them down." },
-  { id: 4, title: "Mad Men: AI Edition", emoji: "\u{1F3A8}", tag: "CAMPAIGN", short: "Pick a brand that deserves better. Build them a full campaign." },
-  { id: 5, title: "Extreme Makeover: Brand Edition", emoji: "\u2728", tag: "BRANDING", short: "Pick a company with terrible branding. Give them the full glow-up." }
+  { id: 0, title: "Shark Tank Moment", emoji: "\u{1F988}", tag: "STARTUP", short: "Create a startup from scratch. Build the brand, pitch deck &amp; one-liner using Supernormal. Then pitch it to the room." },
+  { id: 1, title: "The Devil Wears Decks", emoji: "\u{1F460}", tag: "DESIGN", short: "Find a terrible presentation online. Use Supernormal to redesign it into something stunning. Before/after reveal." },
+  { id: 2, title: "The Apprentice: Agency Edition", emoji: "\u{1F527}", tag: "AUTOMATION", short: "Pick a broken workflow. Use Supernormal + Claude to build a real automation that fixes it. Demo it live." },
+  { id: 3, title: "Ocean\u2019s Eleven: The Intel Job", emoji: "\u{1F575}\uFE0F", tag: "STRATEGY", short: "Pick a competitor. Use Supernormal to build a full competitive teardown with visuals and strategy." },
+  { id: 4, title: "Mad Men: AI Edition", emoji: "\u{1F3A8}", tag: "CAMPAIGN", short: "Pick a brand. Use Supernormal to create a full ad campaign — creatives, copy, images, taglines. Pitch it." },
+  { id: 5, title: "Extreme Makeover: Brand Edition", emoji: "\u2728", tag: "BRANDING", short: "Pick a company with bad branding. Use Supernormal to deliver a full rebrand — logo, voice, templates." }
 ];
 
 const fullDescs = [
@@ -1411,14 +1409,7 @@ db.ref('teams').on('value', snap => {
   // Challenge cards
   const cl = document.getElementById('challengeList');
   const avatarColors = ['#1a8fff','#f5a623','#4ade80','#a78bfa','#ff6b9d','#0070e0'];
-  const hints = [
-      '\uD83D\uDCA1 Think big. Pitch bigger.',
-      '\uD83D\uDCCA Ugly in, stunning out.',
-      '\u26A1 Fix it. Automate it. Ship it.',
-      '\uD83C\uDFAF Know thy enemy.',
-      '\uD83D\uDCE3 Make them remember you.',
-      '\uD83D\uDC85 Before & after, live.'
-    ];
+  
 
   function buildCountHtml(c, teamCount) {
     let avatarHtml = '';
@@ -1450,7 +1441,6 @@ db.ref('teams').on('value', snap => {
         '<div class="card-tag">' + c.tag + '</div>' +
         '<div class="card-title">' + c.title + '</div>' +
         '<div class="card-desc">' + c.short + '</div>' +
-        '<div class="card-hint">' + hints[idx] + '</div>' +
         '<div class="card-count' + (teamCount > 0 ? ' has-teams' : '') + '" data-challenge-id="' + c.id + '">' + buildCountHtml(c, teamCount) + '</div>';
       card.onclick = function() { showChallengeInfo(idx); };
       cl.appendChild(card);
