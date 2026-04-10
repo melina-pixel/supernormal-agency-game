@@ -975,11 +975,11 @@ body::after {
 }
 .card-steps {
   display: block;
-  margin-top: 6px;
-  font-size: 11px;
-  font-weight: 500;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--accent);
-  opacity: 0.7;
+  opacity: 0.8;
   letter-spacing: 0.01em;
 }
 
@@ -1221,12 +1221,12 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 const challenges = [
-  { id: 0, title: "Shark Tank Moment", emoji: "\u{1F988}", tag: "STARTUP", short: "Create a startup from scratch. Build the brand, pitch deck &amp; one-liner using Supernormal. Then pitch it to the room.<br><span class='card-steps'>① Record meeting ② Build with AI ③ Pitch live</span>" },
-  { id: 1, title: "The Devil Wears Decks", emoji: "\u{1F460}", tag: "DESIGN", short: "Find a terrible presentation online. Use Supernormal to redesign it into something stunning. Before/after reveal.<br><span class='card-steps'>① Find ugly deck ② Record roast ③ Redesign with AI</span>" },
-  { id: 2, title: "The Apprentice: Agency Edition", emoji: "\u{1F527}", tag: "AUTOMATION", short: "Pick a broken workflow. Use Supernormal + Claude to build a real automation that fixes it. Demo it live.<br><span class='card-steps'>① Pick pain point ② Record fix plan ③ Build &amp; demo</span>" },
-  { id: 3, title: "Ocean\u2019s Eleven: The Intel Job", emoji: "\u{1F575}\uFE0F", tag: "STRATEGY", short: "Pick a competitor. Use Supernormal to build a full competitive teardown with visuals and strategy.<br><span class='card-steps'>① Pick target ② Record analysis ③ Build intel report</span>" },
-  { id: 4, title: "Mad Men: AI Edition", emoji: "\u{1F3A8}", tag: "CAMPAIGN", short: "Pick a brand. Use Supernormal to create a full ad campaign — creatives, copy, images, taglines. Pitch it.<br><span class='card-steps'>① Pick brand ② Record ideation ③ Create campaign</span>" },
-  { id: 5, title: "Extreme Makeover: Brand Edition", emoji: "\u2728", tag: "BRANDING", short: "Pick a company with bad branding. Use Supernormal to deliver a full rebrand — logo, voice, templates.<br><span class='card-steps'>① Pick company ② Record roast ③ Deliver glow-up</span>" }
+  { id: 0, title: "Shark Tank Moment", emoji: "\u{1F988}", tag: "STARTUP", short: "Create a startup from scratch. Build the brand, pitch deck &amp; one-liner using Supernormal. Then pitch it to the room.<br><span class='card-steps'>Record meeting → Build with AI → Pitch live</span>" },
+  { id: 1, title: "The Devil Wears Decks", emoji: "\u{1F460}", tag: "DESIGN", short: "Find a terrible presentation online. Use Supernormal to redesign it into something stunning. Before/after reveal.<br><span class='card-steps'>Find ugly deck → Record roast → Redesign with AI</span>" },
+  { id: 2, title: "The Apprentice: Agency Edition", emoji: "\u{1F527}", tag: "AUTOMATION", short: "Pick a broken workflow. Use Supernormal + Claude to build a real automation that fixes it. Demo it live.<br><span class='card-steps'>Pick pain point → Record fix plan → Build & demo</span>" },
+  { id: 3, title: "Ocean\u2019s Eleven: The Intel Job", emoji: "\u{1F575}\uFE0F", tag: "STRATEGY", short: "Pick a competitor. Use Supernormal to build a full competitive teardown with visuals and strategy.<br><span class='card-steps'>Pick target → Record analysis → Build intel report</span>" },
+  { id: 4, title: "Mad Men: AI Edition", emoji: "\u{1F3A8}", tag: "CAMPAIGN", short: "Pick a brand. Use Supernormal to create a full ad campaign — creatives, copy, images, taglines. Pitch it.<br><span class='card-steps'>Pick brand → Record ideation → Create campaign</span>" },
+  { id: 5, title: "Extreme Makeover: Brand Edition", emoji: "\u2728", tag: "BRANDING", short: "Pick a company with bad branding. Use Supernormal to deliver a full rebrand — logo, voice, templates.<br><span class='card-steps'>Pick company → Record roast → Deliver glow-up</span>" }
 ];
 
 const fullDescs = [
@@ -1459,10 +1459,10 @@ db.ref('teams').on('value', snap => {
       avatarHtml = '<span class="team-avatars">';
       const challengeTeams = entries.filter(([, t]) => t.challenge === c.id);
       const teamNames = challengeTeams.map(([, t]) => t.name || 'Team');
-      for (let a = 0; a < Math.min(teamNames.length, 3); a++) {
+      for (let a = 0; a < Math.min(teamNames.length, 10); a++) {
         avatarHtml += '<span class="team-name-pill">' + teamNames[a].replace(/</g,'&lt;') + '</span>';
       }
-      if (teamCount > 3) avatarHtml += '<span class="team-name-pill">+' + (teamCount - 3) + ' more</span>';
+      
       avatarHtml += '</span>';
     }
     const countLabel = teamCount === 0 ? '<span class="live-indicator"></span> 0 teams' : '<span class="live-indicator active"></span> ' + teamCount + ' team' + (teamCount !== 1 ? 's' : '');
