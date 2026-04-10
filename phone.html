@@ -4,7 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Supernormal Agency Thursdays</title>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">
+function startFresh() {
+  localStorage.removeItem('sn_team');
+  localStorage.removeItem('sn_uid');
+  localStorage.removeItem('sn_challenge');
+  // Remove team from Firebase
+  if (uid) {
+    db.ref('teams/' + uid).remove();
+    db.ref('votedUsers/' + uid).remove();
+  }
+  window.location.reload();
+}
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <style>
@@ -298,7 +310,7 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,1
 <button class="settings-btn" id="settingsBtn">&#8943;</button>
 <div class="settings-menu" id="settingsMenu">
   <div class="sm-team">Team: <strong id="smTeamName"></strong></div>
-  <button class="sm-btn" id="smChangeName">Change name</button>
+  <button class="sm-btn" id="smChangeName">Change name</button><button class="settings-opt" onclick="startFresh()">Start fresh</button>
   <button class="sm-btn" id="smChangeChallenge" style="display:none">Change challenge</button>
 </div>
 
