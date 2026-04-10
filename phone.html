@@ -499,6 +499,20 @@ function hideBanner() { $('connBanner').classList.remove('visible'); }
 // Auth
 auth.signInAnonymously().then(r => {
   uid = r.user.uid;
+    // Watch for challenge changes from presenter (drag-drop)
+    db.ref('/teams/' + uid + '/challenge').on('value', function(snap) {
+      var newCh = snap.val();
+      if (newCh !== null && newCh !== undefined) {
+        localStorage.setItem('sn_challenge', String(newCh));
+        var ch = challenges[newCh] || challenges[0];
+        var badge = document.getElementById('chBadge');
+        if (badge) {
+          var e2 = badge.querySelector('.emoji'); if (e2) e2.textContent = ch.emoji;
+          var t2 = badge.querySelector('.title'); if (t2) t2.textContent = ch.title;
+        }
+        var d2 = document.getElementById('chDescText'); if (d2) d2.textContent = ch.desc;
+      }
+    });
   localStorage.setItem('sn_uid', uid);
   const saved = localStorage.getItem('sn_team');
   if (saved) {
