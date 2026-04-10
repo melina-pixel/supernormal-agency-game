@@ -293,7 +293,7 @@ body::after {
 
 /* ── SCREEN 1: TEAMS & CHALLENGES ── */
 .challenges-wrap {
-  max-width: 1100px; width: 100%; padding: 0 16px;
+  max-width: 1100px; width: 100%; padding: 20px 16px 0;
   display: flex; flex-direction: column;
   height: calc(100vh - 60px - 52px); max-height: calc(100vh - 60px - 52px); justify-content: center;
   overflow: hidden;
@@ -362,15 +362,16 @@ body::after {
 }
 .challenge-card 
 .challenge-card .card-count {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 10px; color: var(--text-subtle);
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--accent);
   font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  background: rgba(0,0,0,0.03);
-  padding: 2px 8px; border-radius: 20px;
-  transition: all 0.3s ease;
-  margin-top: auto;
-  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 .challenge-card .card-count.has-teams {
   background: var(--accent-soft);
@@ -392,11 +393,11 @@ body::after {
 .challenge-card .card-count .team-avatar:first-child { margin-left: 0; }
 .challenge-card .card-count .team-name-pill {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-  color: var(--text);
+  color: var(--accent);
   background: var(--accent-light) !important;
-  border: 1px solid rgba(26,143,255,0.15);
+  border: 1px solid rgba(26,143,255,0.12);
   padding: 2px 10px;
   border-radius: 20px;
   margin-right: 4px;
@@ -1056,6 +1057,13 @@ body::after {
 
 <!-- SCREEN 1: TEAMS & CHALLENGES -->
 <div class="screen" id="screen1">
+  <div class="welcome-floats" style="z-index:0;">
+    <span class="float-emoji" style="left:3%;top:20%;font-size:22px;animation-duration:14s;">✦</span>
+    <span class="float-emoji" style="left:95%;top:30%;font-size:16px;animation-duration:18s;animation-delay:-4s;">✦</span>
+    <span class="float-emoji" style="left:8%;top:75%;font-size:18px;animation-duration:16s;animation-delay:-7s;">✦</span>
+    <span class="float-emoji" style="left:93%;top:70%;font-size:14px;animation-duration:20s;animation-delay:-2s;">✦</span>
+    <span class="float-emoji" style="left:50%;top:95%;font-size:12px;animation-duration:22s;animation-delay:-5s;">✦</span>
+  </div>
   <div class="challenges-wrap">
     <div class="section-header stagger-1">
       <div class="section-title">Choose your challenge</div>
