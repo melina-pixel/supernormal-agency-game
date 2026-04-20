@@ -1470,6 +1470,14 @@ function goTo(n) {
   db.ref('currentScreen').set(n);
   document.querySelectorAll('.screen').forEach((s, i) => {
     s.classList.toggle('active', i === n);
+    // Re-trigger stagger animations when screen becomes active
+    if (i === n) {
+      s.querySelectorAll('[class*="stagger-"]').forEach(el => {
+        el.style.animation = 'none';
+        el.offsetHeight; // force reflow
+        el.style.animation = '';
+      });
+    }
   });
   const btns = document.querySelectorAll('.host-btn:not(.reset)');
   btns.forEach((btn, i) => btn.classList.toggle('current', i === n));
