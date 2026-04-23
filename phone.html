@@ -323,7 +323,7 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,1
   </form>
   <div class="waiting" id="waiting">
     <div class="wait-row"><div class="dot pulse"></div><span>Waiting for host to start...</span></div>
-    <button class="change-btn" onclick="startFresh()">Change team name</button>
+    <button class="change-btn" onclick="changeName()">Change team name</button>
   </div>
 </div>
 
@@ -933,6 +933,14 @@ function initWinner() {
       $('runName').textContent = esc(r.runnerUp.name) + ' \u2014 ' + rch.emoji + ' ' + rch.title;
     }
   });
+}
+
+function changeName() {
+  $('teamInput').value = localStorage.getItem('sn_team') || '';
+  $('joinForm').style.display = '';
+  $('waiting').style.display = 'none';
+  $('joinBtn').disabled = false;
+  showScreen(0);
 }
 
 function startFresh() {
