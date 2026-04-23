@@ -556,15 +556,16 @@ auth.signInAnonymously().then(r => {
 }).catch(e => console.error('Auth error', e));
 
 function onScreenChange(s) {
+  // TV screens: 0=Intro, 1=Welcome, 2=Challenges, 3=Timer, 4=ComeBack, 5=Vote, 6=Winner
+  // Phone screens: 0=Join, 1=Pick, 2=Timer, 3=TimesUp, 4=Vote, 5=Winner
   const joined = localStorage.getItem('sn_team');
-  if (s === 0) { showScreen(0); return; }
+  if (s <= 1) { showScreen(0); return; } // Intro + Welcome → Join
   if (!joined) { showScreen(0); return; }
-  if (s === 1) initPick();
-  if (s === 2) initTimer();
-  if (s === 3) initTimesUp();
-  if (s === 4) initVote();
-  if (s === 5) initWinner();
-  showScreen(s);
+  if (s === 2) { initPick(); showScreen(1); return; }
+  if (s === 3) { initTimer(); showScreen(2); return; }
+  if (s === 4) { initTimesUp(); showScreen(3); return; }
+  if (s === 5) { initVote(); showScreen(4); return; }
+  if (s === 6) { initWinner(); showScreen(5); return; }
 }
 
 // Screen 0: Join
@@ -628,7 +629,7 @@ function initPick() {
       if (v == null && savedCh != null) db.ref('/teams/' + uid + '/challenge').set(chIdx);
       showConfirmedState(challenges[chIdx]);
       // --- Feature 3: Late joiner — if presenter is already past picking, jump ahead ---
-      if (lastPresenterScreen >= 2) {
+      if (lastPresenterScreen >= 3) {
         jumpToLiveScreen();
       }
     } else {
@@ -641,11 +642,11 @@ function initPick() {
 // --- Feature 3: Late joiner jump ---
 function jumpToLiveScreen() {
   userOverride = false;
-  if (lastPresenterScreen === 2) initTimer(true);
-  else if (lastPresenterScreen === 3) initTimesUp();
-  else if (lastPresenterScreen === 4) initVote();
-  else if (lastPresenterScreen === 5) initWinner();
-  if (lastPresenterScreen >= 2) showScreen(lastPresenterScreen);
+  // TV→Phone mapping (TV +1 due to Intro screen)
+  if (lastPresenterScreen === 3) { initTimer(true); showScreen(2); }
+  else if (lastPresenterScreen === 4) { initTimesUp(); showScreen(3); }
+  else if (lastPresenterScreen === 5) { initVote(); showScreen(4); }
+  else if (lastPresenterScreen === 6) { initWinner(); showScreen(5); }
 }
 
 function showChallengeDetail(c) {
@@ -681,7 +682,7 @@ function showChallengeDetail(c) {
     db.ref('/teams/' + uid + '/challenge').set(c.id);
     showConfirmedState(c);
     // --- Feature 3: Late joiner — after picking, jump if presenter is ahead ---
-    if (lastPresenterScreen >= 2) {
+    if (lastPresenterScreen >= 3) {
       jumpToLiveScreen();
     }
   });
