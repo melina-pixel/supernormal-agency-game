@@ -588,8 +588,14 @@ $('joinForm').addEventListener('submit', e => {
   localStorage.setItem('sn_team', name);
   localStorage.setItem('sn_uid', uid);
   $('joinForm').style.display = 'none';
-  $('waiting').style.display = 'flex';
   $('joinBtn').disabled = false;
+
+  // Late joiner: if TV is already past Welcome, go to the current screen
+  if (lastPresenterScreen >= 2) {
+    onScreenChange(lastPresenterScreen);
+  } else {
+    $('waiting').style.display = 'flex';
+  }
 });
 
 // Screen 1: Pick
