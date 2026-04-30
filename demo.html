@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agency Thursdays — How the game works</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: linear-gradient(180deg, #dbe7f8 0%, #f0f6fd 60%, #f8fafd 100%);
+    color: #0d0d0d;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 60px;
+    overflow: hidden;
+  }
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 1400px;
+    animation: fadeIn 0.4s ease;
+  }
+  .screen.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  .label {
+    font-size: 14px; font-weight: 700; color: #1a8fff;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 18px;
+  }
+  h1 { font-size: 88px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.02; margin-bottom: 18px; }
+  h1 .accent { color: #1a8fff; }
+  h2 { font-size: 56px; font-weight: 800; letter-spacing: -0.02em; text-align: center; margin-bottom: 12px; }
+  .lede { font-size: 20px; color: #666; line-height: 1.5; }
+  .center { text-align: center; }
+  .meta { display: flex; gap: 14px; font-size: 18px; color: #888; margin-top: 10px; margin-bottom: 24px; }
+
+  /* Welcome layout — two columns */
+  .welcome-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .timeline { display: flex; flex-direction: column; gap: 18px; }
+  .timeline-item { display: flex; gap: 24px; align-items: flex-start; }
+  .timeline-time { font-weight: 700; color: #1a8fff; min-width: 80px; font-size: 18px; }
+  .timeline-content h4 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .timeline-content p { font-size: 16px; color: #666; line-height: 1.4; }
+
+  /* Challenges */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px; }
+  .card {
+    background: white; padding: 28px; border-radius: 20px;
+    box-shadow: 0 6px 28px rgba(20, 50, 100, 0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(20, 50, 100, 0.10); }
+  .emoji { font-size: 44px; line-height: 1; margin-bottom: 14px; }
+  .tag {
+    display: inline-block; padding: 5px 12px; border-radius: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 12px;
+  }
+  .tag.STARTUP { background: #e8f1fd; color: #1a8fff; }
+  .tag.DESIGN { background: #fde8eb; color: #d63b53; }
+  .tag.AUTOMATION { background: #fdeed6; color: #d97706; }
+  .tag.STRATEGY { background: #efe7fc; color: #7c4dca; }
+  .tag.ANALYTICS { background: #d8f5e1; color: #16a34a; }
+  .tag.BRANDING { background: #fef3cd; color: #c98b04; }
+  .card h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; line-height: 1.25; }
+  .card p { font-size: 15px; color: #555; line-height: 1.45; }
+
+  /* Outputs grid 2x2 */
+  .outputs-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 28px;
+  }
+  .output {
+    padding: 28px 30px; background: white; border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(20, 50, 100, 0.06);
+  }
+  .output-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .output-title .accent { color: #1a8fff; }
+  .output p { font-size: 16px; color: #555; line-height: 1.5; }
+  .winner-badge {
+    display: inline-block; background: #fef3cd; color: #c98b04;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    padding: 3px 10px; border-radius: 5px; margin-left: 8px; vertical-align: middle;
+  }
+
+  /* Next CTA */
+  .next-screen { text-align: center; }
+  .next-screen h1 { font-size: 104px; }
+  .cta-btn {
+    display: inline-block; padding: 18px 36px;
+    background: #1a8fff; color: white;
+    border: none; border-radius: 100px;
+    font-size: 18px; font-weight: 600; cursor: pointer;
+    text-decoration: none; margin-top: 32px;
+    transition: background 0.2s;
+  }
+  .cta-btn:hover { background: #0a73d6; }
+  .cta-btn.dark { background: #0d0d0d; }
+  .cta-btn.dark:hover { background: #2a2a2a; }
+
+  /* Bottom nav */
+  .progress {
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
+    border-top: 1px solid #e5edf6;
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .pill-back, .pill-next {
+    background: white; border: 1px solid #d8e2ee; padding: 7px 14px;
+    border-radius: 100px; font-size: 12px; font-weight: 600;
+    cursor: pointer; color: #333;
+  }
+  .pill-back:disabled { opacity: 0.4; cursor: not-allowed; }
+  .pill-next { background: #0d0d0d; color: white; border-color: #0d0d0d; }
+  .progress-dots { display: flex; gap: 6px; align-items: center; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #cdd9e8; transition: all 0.2s; }
+  .dot.active { background: #1a8fff; width: 20px; border-radius: 3px; }
+  .step-label { font-size: 12px; color: #888; font-weight: 500; margin-right: 10px; }
+  .demo-banner {
+    flex-shrink: 0;
+    background: #1a8fff; color: white; padding: 8px 20px;
+    text-align: center; font-size: 12px; font-weight: 500;
+  }
+  .demo-banner a { color: white; text-decoration: underline; }
+
+  /* Mobile / small screens */
+  @media (max-width: 900px) {
+    body { overflow: auto; }
+    .container { overflow: visible; padding: 20px 16px; }
+    .welcome-grid { grid-template-columns: 1fr; gap: 24px; }
+    .grid { grid-template-columns: 1fr 1fr; }
+    .outputs-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 36px; }
+    .next-screen h1 { font-size: 44px; }
+    h2 { font-size: 28px; }
+  }
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">
+  Self-guided demo of the live game. <a href="#" id="rsvp-banner" target="_blank">RSVP for May 28</a> to play the next round in person.
+</div>
+
+<div class="container">
+
+  <!-- 1: WELCOME -->
+  <div class="screen active" id="screen-welcome">
+    <div class="welcome-grid">
+      <div>
+        <p class="label">Agency Thursdays · Stockholm</p>
+        <h1>Welcome to<br><span class="accent">Supernormal HQ.</span></h1>
+        <div class="meta">
+          <span>May 28, 2026</span><span>·</span><span>After-work</span>
+        </div>
+        <p class="lede">Let's build something cool.</p>
+      </div>
+      <div>
+        <p class="label">Run of Show</p>
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-time">17:30</div><div class="timeline-content"><h4>Doors open</h4><p>Drinks, snacks, mingle</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">18:25</div><div class="timeline-content"><h4>Hands-on challenge</h4><p>Teams form, the game begins (~40 min)</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">19:05</div><div class="timeline-content"><h4>Quick share-outs</h4><p>3–5 min per team, fast</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">19:30</div><div class="timeline-content"><h4>Open networking</h4><p>Vote, winner, drinks</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2: CHALLENGES -->
+  <div class="screen" id="screen-challenges">
+    <h2>Choose your challenge</h2>
+    <p class="lede center">Six challenges, each built around a real workflow Supernormal powers.</p>
+    <div class="grid">
+      <div class="card"><div class="emoji">🦈</div><div class="tag STARTUP">STARTUP</div><h3>Shark Tank Moment</h3><p>Pitch a brand from scratch using Supernormal.</p></div>
+      <div class="card"><div class="emoji">👠</div><div class="tag DESIGN">DESIGN</div><h3>The Devil Wears Decks</h3><p>Find a terrible deck. Redesign it into something stunning.</p></div>
+      <div class="card"><div class="emoji">🔧</div><div class="tag AUTOMATION">AUTOMATION</div><h3>The Apprentice</h3><p>Pick a broken workflow. Build a real automation that fixes it.</p></div>
+      <div class="card"><div class="emoji">🕵️</div><div class="tag STRATEGY">STRATEGY</div><h3>The Strategy Room</h3><p>Reverse-engineer a brand. Find blind spots, pitch the win.</p></div>
+      <div class="card"><div class="emoji">📊</div><div class="tag ANALYTICS">ANALYTICS</div><h3>Moneyball</h3><p>Take messy data. Find the hidden million-dollar insight.</p></div>
+      <div class="card"><div class="emoji">✨</div><div class="tag BRANDING">BRANDING</div><h3>Extreme Makeover</h3><p>Pick a company with bad branding. Full glow-up.</p></div>
+    </div>
+  </div>
+
+  <!-- 3: OUTPUTS -->
+  <div class="screen" id="screen-outputs">
+    <p class="label center">From the last round · April 23</p>
+    <h2>20 people. 40 minutes. Honestly better than expected.</h2>
+    <div class="outputs-grid">
+      <div class="output">
+        <div class="output-title">Spotify, but <span class="accent">Nordic</span>.</div>
+        <p>Pulled out of its Gen Z hype theme into something minimal and Scandi. Cleaner, quieter, more confident.</p>
+      </div>
+      <div class="output">
+        <div class="output-title">Uvee — built from scratch. <span class="winner-badge">WINNER</span></div>
+        <p>A new brand for UV-detecting rings. Logo, voice, deck. Voted winner of the night.</p>
+      </div>
+      <div class="output">
+        <div class="output-title">Jaguar, <span class="accent">undone</span>.</div>
+        <p>Undid the rebrand the internet hated. Back to luxury where it belonged.</p>
+      </div>
+      <div class="output">
+        <div class="output-title">HBO Max as a <span class="accent">cautionary tale</span>.</div>
+        <p>Ran HBO Max as a case study in why some rebrands probably shouldn't ship.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4: NEXT EVENT CTA -->
+  <div class="screen next-screen" id="screen-next">
+    <p class="label">Round 2</p>
+    <h1>Thursday <span class="accent">28 May.</span></h1>
+    <p class="lede">Supernormal HQ, Stockholm. Same format. New challenges in the works.</p>
+    <p class="lede" style="margin-top: 8px;">For creatives, agency people, and anyone curious about where AI is actually useful in client work.</p>
+    <a href="#" id="rsvp-cta" target="_blank" class="cta-btn">RSVP on Luma →</a>
+    <p style="margin-top: 24px; font-size: 13px; color: #888;">
+      Want to run something like this for your team? <a href="https://www.linkedin.com/in/melina-giorgalletou" target="_blank" style="color: #1a8fff; text-decoration: none;">DM me</a>.
+    </p>
+  </div>
+
+</div>
+
+<!-- Bottom navigation -->
+<div class="progress">
+  <button class="pill-back" id="back" onclick="back()">← Back</button>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <span class="step-label" id="step-label">Welcome</span>
+    <div class="progress-dots">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+  <button class="pill-next" id="next-pill" onclick="forward()">Next →</button>
+</div>
+
+<script>
+  const screens = ['welcome', 'challenges', 'outputs', 'next'];
+  const labels = ['Welcome', 'Challenges', 'What they built', 'Round 2'];
+  const LUMA_URL = 'https://luma.com/e59b6378?utm_source=mel-linkedin';
+  document.getElementById('rsvp-banner').href = LUMA_URL;
+  document.getElementById('rsvp-cta').href = LUMA_URL;
+
+  let current = 0;
+  function show(idx) {
+    if (idx < 0 || idx >= screens.length) return;
+    current = idx;
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + screens[idx]).classList.add('active');
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    document.getElementById('step-label').textContent = labels[idx];
+    document.getElementById('back').disabled = idx === 0;
+    document.getElementById('next-pill').textContent = idx === screens.length - 1 ? 'RSVP →' : 'Next →';
+  }
+  function forward() {
+    if (current < screens.length - 1) show(current + 1);
+    else window.open(LUMA_URL, '_blank');
+  }
+  function back() { if (current > 0) show(current - 1); }
+</script>
+
+</body>
+</html>
